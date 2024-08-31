@@ -67,51 +67,48 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={10}
-      />
-
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={23}
-      />
-
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={15}
-      />
-
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={17}
-      />
+      {pizzas.length > 0 ? (
+        <ul>
+          {pizzaData.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>Sorry, we're out of stock right now, Better luck next time.</p>
+      )}
     </main>
   );
 }
 
 function Pizza(props) {
-  return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
-      <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
-      </div>
-    </div>
-  );
+  if (!props.pizzaObj.soldOut) {
+    return (
+      <li className="pizza">
+        <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+        <div>
+          <h3>{props.pizzaObj.name}</h3>
+          <p>{props.pizzaObj.ingredients}</p>
+          <span>{props.pizzaObj.price}</span>
+        </div>
+      </li>
+    );
+  } else {
+    return (
+      <li className="pizza">
+        <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+        <div>
+          <h3>{props.pizzaObj.name}</h3>
+          <p>{props.pizzaObj.ingredients}</p>
+          <span>{props.pizzaObj.price}</span>
+          <p>Oops, Pizza out of Stock</p>
+        </div>
+      </li>
+    );
+  }
 }
 
 function Footer() {
@@ -120,18 +117,20 @@ function Footer() {
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
-  /*if (hour >= openHour && hour <= closeHour) {
-    alert("We're currently open!");
-  } else {
-    alert("Sorry we are closed.");
-  }*/
-
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently open
+      {isOpen ? (
+        <div className="order">
+          <p>
+            We're open untill {closeHour}:00. Come visit us or order online.
+          </p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>Sorry, we are closed. Come again between 12:00 - 22:00</p>
+      )}
     </footer>
   );
-  //return React.createElement("footer", null, "We're currently open");
 }
 
 // React v18
